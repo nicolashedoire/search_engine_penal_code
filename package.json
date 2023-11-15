@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "prettier": "npx prettier --write .",
+    "push-model": "npx prisma db push",
     "test": "jest",
     "extract-data": "node scripts/extract-data.mjs"
   },
