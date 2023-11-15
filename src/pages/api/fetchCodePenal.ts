@@ -1,3 +1,4 @@
+import { Article } from "@/types/article";
 import { JSDOM } from "jsdom";
 import { NextApiRequest, NextApiResponse } from "next";
 
@@ -11,19 +12,15 @@ export default async function handler(
   const html = await response.text();
   const dom = new JSDOM(html);
   const document = dom.window.document;
-  let articles: any = [];
+  let articles: Article[] = [];
 
   document
     .querySelectorAll(".js-child.list-article-consommation")
     .forEach((articleElement) => {
-      const titleElement: any = articleElement.querySelector(".name-article");
-      const title: any = titleElement ? titleElement.textContent?.trim() : "";
-      const url =
-        titleElement && titleElement.querySelector("a")
-          ? titleElement.querySelector("a").href
-          : "";
-
-      const contentElement = articleElement.querySelector(".content");
+      const titleElement: Element | null = articleElement.querySelector(".name-article");
+      const title: string = titleElement?.textContent?.trim() ?? "";
+      const url: string = titleElement?.querySelector("a")?.href ?? "";
+      const contentElement: Element | null = articleElement.querySelector(".content");
       let content = "";
       if (contentElement) {
         contentElement.querySelectorAll("p").forEach((p) => {

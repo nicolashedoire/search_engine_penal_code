@@ -1,7 +1,14 @@
+import { Action, Article } from "@/types/article";
 import { useCallback, useEffect, useState } from "react";
 
-const useArticleSearch = (state: any, dispatch: any) => {
-  const [worker, setWorker] = useState<any>();
+interface ArticleSearchState {
+  articles: Article[];
+  searchTerm: string;
+  caseSensitive: boolean;
+}
+
+const useArticleSearch = (state: ArticleSearchState, dispatch: React.Dispatch<Action>) => {
+  const [worker, setWorker] = useState<Worker | undefined>();
   const [isSearching, setIsSearching] = useState(false);
 
   useEffect(() => {
@@ -13,21 +20,21 @@ const useArticleSearch = (state: any, dispatch: any) => {
         return response.blob();
       })
       .then((blob) => {
-        const worker = new Worker(URL.createObjectURL(blob));
-        worker.onmessage = (e) => {
+        const newWorker = new Worker(URL.createObjectURL(blob));
+        newWorker.onmessage = (e) => {
           const articlesMarked = e.data;
           dispatch({ type: "SET_SEARCH_RESULTS", payload: articlesMarked });
           setIsSearching(false);
         };
 
-        worker.onerror = (error) => {
+        newWorker.onerror = (error) => {
           console.error("Erreur dans le Worker: ", error.message);
           setIsSearching(false);
         };
 
-        setWorker(worker);
+        setWorker(newWorker);
       });
-    return () => worker && worker.terminate();
+    return () => worker?.terminate();
   }, []);
 
   const getHighlightedArticles = useCallback(() => {

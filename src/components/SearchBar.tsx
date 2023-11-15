@@ -5,12 +5,11 @@ interface SearchBarProps {
   onSearch: (query: string) => void;
 }
 
-type FunctionType = (...args: any[]) => void;
-type DebouncedFunction = (...args: any[]) => void;
+type FunctionType<T extends any[]> = (...args: T) => void;
 
-const debounce = (func: FunctionType, delay: number): DebouncedFunction => {
+const debounce = <T extends any[]>(func: FunctionType<T>, delay: number): FunctionType<T> => {
   let debounceTimer: NodeJS.Timeout | null = null;
-  return function (...args: any[]) {
+  return function (...args: T) {
     if (debounceTimer) clearTimeout(debounceTimer);
     debounceTimer = setTimeout(() => func(...args), delay);
   };
@@ -20,7 +19,7 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
   const [inputValue, setInputValue] = useState("");
 
   const debouncedSearch = useCallback(
-    debounce((query: string) => onSearch(query), 500),
+    debounce<string[]>((query) => onSearch(query), 500),
     [onSearch],
   );
 

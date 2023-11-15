@@ -13,7 +13,7 @@ export default function SearchResult({ articles }: SearchResultProps) {
     <div className="w-full flex justify-center">
       {articles.length > 0 ? (
         <div className="w-1/2">
-          {articles.map((article: any, index) => {
+          {articles.map((article: Article, index) => {
             return (
               <div
                 key={`${article.title}_${index}`}

@@ -1,11 +1,10 @@
 import { Article } from "@/types/article";
 
 export const createSearchRegex = (
-  searchTerm: string,
-  caseSensitive: boolean,
+  searchTerm: string
 ): RegExp => {
   const safeSearchTerm = searchTerm.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&");
-  const flags = caseSensitive ? "g" : "gi";
+  const flags = "gi";
   return new RegExp(safeSearchTerm, flags);
 };
 

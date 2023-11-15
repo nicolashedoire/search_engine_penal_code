@@ -69,7 +69,7 @@ export default function ArticleList({
             </span>
           </div>
           <div className="h-full overflow-hidden overflow-y-auto mb-42">
-            {articles.map((article: any, index) => {
+            {articles.map((article: Article, index) => {
               return (
                 <div
                   key={`${article.title}_${index}`}

@@ -1,13 +1,4 @@
-import { Article } from "@/types/article";
-
-export interface State {
-  articles: Article[];
-  searchTerm: string;
-  searchResultsMarked: Article[];
-  caseSensitive: boolean;
-  error: string | null;
-  isLoading: boolean;
-}
+import { State, Action } from "@/types/article";
 
 export const initialState: State = {
   articles: [],
@@ -17,43 +8,6 @@ export const initialState: State = {
   error: null,
   isLoading: true,
 };
-
-interface SetArticlesAction {
-  type: "SET_ARTICLES";
-  payload: Article[];
-}
-
-interface SetSearchTermAction {
-  type: "SET_SEARCH_TERM";
-  payload: string;
-}
-
-interface SetSearchResultsAction {
-  type: "SET_SEARCH_RESULTS";
-  payload: Article[];
-}
-
-interface ToggleCaseSensitiveAction {
-  type: "TOGGLE_CASE_SENSITIVE";
-}
-
-interface SetErrorAction {
-  type: "SET_ERROR";
-  payload: string | null;
-}
-
-interface SetLoadingAction {
-  type: "SET_LOADING";
-  payload: boolean;
-}
-
-type Action =
-  | SetArticlesAction
-  | SetSearchTermAction
-  | SetSearchResultsAction
-  | ToggleCaseSensitiveAction
-  | SetErrorAction
-  | SetLoadingAction;
 
 export function reducer(state: State, action: Action): State {
   switch (action.type) {

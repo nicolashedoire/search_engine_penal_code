@@ -1,9 +1,11 @@
+import { Action } from "@/types/article";
+import { GetHighlightedArticlesFunction } from "@/types/getHighlightedArticles";
 import { useState, useEffect, useCallback } from "react";
 
 const useSearch = (
   initialSearchTerm: string,
-  dispatch: any,
-  getHighlightedArticles: any,
+  dispatch: React.Dispatch<Action>,
+  getHighlightedArticles: GetHighlightedArticlesFunction,
 ) => {
   const [searchTerm, setSearchTerm] = useState(initialSearchTerm);
 
