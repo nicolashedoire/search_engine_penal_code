@@ -29,6 +29,6 @@
     ".next/types/**/*.ts",
     "src/pages/api/penal-code.ts",
     "public/searchWorker.js"
-, "src/__tests__/SearchBar.test.js"  ],
+, "src/__tests__/SearchBar.test.js", "src/__tests__/articleReducer.test.js"  ],
   "exclude": ["node_modules"]
 }
