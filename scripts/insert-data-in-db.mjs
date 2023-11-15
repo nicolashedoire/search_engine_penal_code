@@ -1,6 +1,6 @@
-import fetch from 'node-fetch';
-import { JSDOM } from 'jsdom';
-import { PrismaClient } from '@prisma/client';
+import fetch from "node-fetch";
+import { JSDOM } from "jsdom";
+import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
@@ -11,7 +11,7 @@ const fetchWithTimeout = async (resource, options) => {
 
   const response = await fetch(resource, {
     ...options,
-    signal: controller.signal
+    signal: controller.signal,
   });
   clearTimeout(id);
 
@@ -22,7 +22,7 @@ async function main() {
   try {
     const response = await fetchWithTimeout(
       "https://www.legifrance.gouv.fr/codes/section_lc/LEGITEXT000006070719/LEGISCTA000006089684/",
-      { timeout: 10000 }
+      { timeout: 10000 },
     );
 
     if (!response.ok) {
@@ -53,7 +53,7 @@ async function main() {
       });
 
     await Promise.all(articlePromises);
-    console.log('Articles insérés avec succès dans la base de données');
+    console.log("Articles insérés avec succès dans la base de données");
   } catch (error) {
     console.error("Erreur lors de la requête:", error);
   } finally {

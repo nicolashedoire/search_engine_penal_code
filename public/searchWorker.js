@@ -14,7 +14,10 @@ const levenshteinDistance = (a, b) => {
       if (b[i - 1] === a[j - 1]) {
         matrix[i][j] = matrix[i - 1][j - 1];
       } else {
-        matrix[i][j] = Math.min(matrix[i - 1][j - 1] + 1, Math.min(matrix[i][j - 1] + 1, matrix[i - 1][j] + 1));
+        matrix[i][j] = Math.min(
+          matrix[i - 1][j - 1] + 1,
+          Math.min(matrix[i][j - 1] + 1, matrix[i - 1][j] + 1),
+        );
       }
     }
   }
@@ -23,10 +26,12 @@ const levenshteinDistance = (a, b) => {
 };
 
 const highlightContent = (content, searchTerm) => {
-  const regex = new RegExp(searchTerm.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&'), 'gi');
+  const regex = new RegExp(
+    searchTerm.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&"),
+    "gi",
+  );
   return content.replace(regex, (match) => `<mark>${match}</mark>`);
 };
-
 
 self.onmessage = function (e) {
   const { articles, searchTerm, caseSensitive } = e.data;
@@ -38,7 +43,10 @@ self.onmessage = function (e) {
   }
 
   const isCloseMatch = (word, searchTerm) => {
-    return levenshteinDistance(word.toLowerCase(), searchTerm.toLowerCase()) <= threshold;
+    return (
+      levenshteinDistance(word.toLowerCase(), searchTerm.toLowerCase()) <=
+      threshold
+    );
   };
 
   const createSearchRegex = (searchTerm, caseSensitive) => {
@@ -57,8 +65,12 @@ self.onmessage = function (e) {
       const words = article.content.split(/\s+/);
       const titleWords = article.title.split(/\s+/);
 
-      const isContentMatch = words.some(word => isCloseMatch(word, searchTerm));
-      const isTitleMatch = titleWords.some(word => isCloseMatch(word, searchTerm));
+      const isContentMatch = words.some((word) =>
+        isCloseMatch(word, searchTerm),
+      );
+      const isTitleMatch = titleWords.some((word) =>
+        isCloseMatch(word, searchTerm),
+      );
 
       if (isContentMatch || regex.test(article.content)) {
         article.content = highlightContent(article.content, searchTerm);

@@ -1,8 +1,6 @@
 import { Article } from "@/types/article";
 
-export const createSearchRegex = (
-  searchTerm: string
-): RegExp => {
+export const createSearchRegex = (searchTerm: string): RegExp => {
   const safeSearchTerm = searchTerm.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&");
   const flags = "gi";
   return new RegExp(safeSearchTerm, flags);

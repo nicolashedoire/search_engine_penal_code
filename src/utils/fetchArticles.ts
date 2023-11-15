@@ -1,7 +1,10 @@
 import { Action } from "@/types/article";
 import { ToastFunction } from "@/types/toast";
 
-export const fetchArticles = async (dispatch: React.Dispatch<Action>, toast: ToastFunction) => {
+export const fetchArticles = async (
+  dispatch: React.Dispatch<Action>,
+  toast: ToastFunction,
+) => {
   dispatch({ type: "SET_LOADING", payload: true });
   try {
     const response = await fetch(`/api/penal-code`, {

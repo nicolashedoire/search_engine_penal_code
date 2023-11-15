@@ -7,7 +7,10 @@ interface SearchBarProps {
 
 type FunctionType<T extends any[]> = (...args: T) => void;
 
-const debounce = <T extends any[]>(func: FunctionType<T>, delay: number): FunctionType<T> => {
+const debounce = <T extends any[]>(
+  func: FunctionType<T>,
+  delay: number,
+): FunctionType<T> => {
   let debounceTimer: NodeJS.Timeout | null = null;
   return function (...args: T) {
     if (debounceTimer) clearTimeout(debounceTimer);

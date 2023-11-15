@@ -1,6 +1,6 @@
 import { Article } from "@/types/article";
 import React from "react";
-import Loader from "./ui/loader";
+import Loader from "@/components/ui/loader";
 import { DownloadIcon } from "lucide-react";
 
 interface ArticleListProps {
@@ -9,7 +9,7 @@ interface ArticleListProps {
   error: String | null;
 }
 
-export default function ArticleList({
+export default function ArticlesList({
   articles,
   isLoading,
   error,

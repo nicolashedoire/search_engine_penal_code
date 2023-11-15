@@ -7,7 +7,10 @@ interface ArticleSearchState {
   caseSensitive: boolean;
 }
 
-const useArticleSearch = (state: ArticleSearchState, dispatch: React.Dispatch<Action>) => {
+const useArticleSearch = (
+  state: ArticleSearchState,
+  dispatch: React.Dispatch<Action>,
+) => {
   const [worker, setWorker] = useState<Worker | undefined>();
   const [isSearching, setIsSearching] = useState(false);
 
