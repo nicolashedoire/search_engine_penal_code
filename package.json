@@ -10,6 +10,7 @@
     "prettier": "npx prettier --write .",
     "push-model": "npx prisma db push",
     "test": "jest",
+    "test-clear-cache": "jest --clearCache",
     "insert-data-in-db": "node scripts/insert-data-in-db.mjs",
     "extract-data": "node scripts/extract-data.mjs"
   },
@@ -34,6 +35,7 @@
   "devDependencies": {
     "@testing-library/jest-dom": "^6.1.4",
     "@testing-library/react": "^14.1.0",
+    "@testing-library/react-hooks": "^8.0.1",
     "@types/cheerio": "^0.22.34",
     "@types/jsdom": "^21.1.5",
     "@types/json2csv": "^5.0.6",
