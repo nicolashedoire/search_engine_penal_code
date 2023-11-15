@@ -32,7 +32,7 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
       <Input
         type="text"
         onChange={(e) => setInputValue(e.target.value)}
-        placeholder="Recherchez des articles de loi..."
+        placeholder="Recherchez des articles de loi par mot clé"
         className="w-1/2"
       />
     </div>
