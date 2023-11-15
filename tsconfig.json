@@ -27,7 +27,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "src/pages/api/fetchCodePenal.ts",
+    "src/pages/api/penal-code.ts",
     "public/searchWorker.js"
 , "src/__tests__/SearchBar.test.js"  ],
   "exclude": ["node_modules"]

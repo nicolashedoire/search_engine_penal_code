@@ -4,7 +4,7 @@ import { ToastFunction } from "@/types/toast";
 export const fetchArticles = async (dispatch: React.Dispatch<Action>, toast: ToastFunction) => {
   dispatch({ type: "SET_LOADING", payload: true });
   try {
-    const response = await fetch(`/api/fetchCodePenal`, {
+    const response = await fetch(`/api/penal-code`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -14,7 +14,7 @@ export const fetchArticles = async (dispatch: React.Dispatch<Action>, toast: Toa
       throw new Error(`Erreur HTTP: ${response.status}`);
     }
     const articles = await response.json();
-    dispatch({ type: "SET_ARTICLES", payload: articles.data });
+    dispatch({ type: "SET_ARTICLES", payload: articles });
   } catch (error) {
     if (error instanceof Error) {
       dispatch({ type: "SET_ERROR", payload: error.message });

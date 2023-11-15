@@ -1,28 +1,24 @@
-import { Article } from "@/types/article";
-import { JSDOM } from "jsdom";
-import { NextApiRequest, NextApiResponse } from "next";
+import fetch from 'node-fetch';
+import { JSDOM } from 'jsdom';
+import { PrismaClient } from '@prisma/client';
 
-const fetchWithTimeout = async (resource: string, options: { timeout: number}) => {
+const prisma = new PrismaClient();
+
+const fetchWithTimeout = async (resource, options) => {
   const { timeout = 8000 } = options;
-
   const controller = new AbortController();
   const id = setTimeout(() => controller.abort(), timeout);
 
   const response = await fetch(resource, {
     ...options,
-    signal: controller.signal  
+    signal: controller.signal
   });
   clearTimeout(id);
 
   return response;
 };
 
-
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse,
-) {
-
+async function main() {
   try {
     const response = await fetchWithTimeout(
       "https://www.legifrance.gouv.fr/codes/section_lc/LEGITEXT000006070719/LEGISCTA000006089684/",
@@ -36,28 +32,33 @@ export default async function handler(
     const html = await response.text();
     const dom = new JSDOM(html);
     const document = dom.window.document;
-    let articles: Article[] = [];
-  
+    let articlePromises = [];
+
     document
       .querySelectorAll(".js-child.list-article-consommation")
       .forEach((articleElement) => {
-        const titleElement: Element | null = articleElement.querySelector(".name-article");
-        const title: string = titleElement?.textContent?.trim() ?? "";
-        const url: string = titleElement?.querySelector("a")?.href ?? "";
-        const contentElement: Element | null = articleElement.querySelector(".content");
+        const titleElement = articleElement.querySelector(".name-article");
+        const title = titleElement?.textContent?.trim() ?? "";
+        const url = titleElement?.querySelector("a")?.href ?? "";
+        const contentElement = articleElement.querySelector(".content");
         let content = "";
         if (contentElement) {
           contentElement.querySelectorAll("p").forEach((p) => {
             content += p.textContent + "\n";
           });
         }
-  
-        articles.push({ title, url, content: `<p>${content.trim()}</p>` });
+
+        const articleData = { title, url, content: content.trim() };
+        articlePromises.push(prisma.article.create({ data: articleData }));
       });
-  
-    res.status(200).json({ data: articles });
+
+    await Promise.all(articlePromises);
+    console.log('Articles insérés avec succès dans la base de données');
   } catch (error) {
     console.error("Erreur lors de la requête:", error);
-    res.status(500).json({ error: "Erreur lors de la récupération des données." });
+  } finally {
+    await prisma.$disconnect();
   }
 }
+
+main();

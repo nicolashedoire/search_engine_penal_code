@@ -58,7 +58,7 @@ export default function ArticleList({
           <div className="flex justify-between">
             <h1 className="mb-3 flex items-center">
               Nombre d&apos;articles :
-              <span className="font-medium">{articles.length}</span>
+              <span className="font-medium">{articles?.length}</span>
             </h1>
             <span
               className="flex items-center mb-3 cursor-pointer"
@@ -69,7 +69,7 @@ export default function ArticleList({
             </span>
           </div>
           <div className="h-full overflow-hidden overflow-y-auto mb-42">
-            {articles.map((article: Article, index) => {
+            {articles?.map((article: Article, index) => {
               return (
                 <div
                   key={`${article.title}_${index}`}

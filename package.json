@@ -10,6 +10,7 @@
     "prettier": "npx prettier --write .",
     "push-model": "npx prisma db push",
     "test": "jest",
+    "insert-data-in-db": "node scripts/insert-data-in-db.mjs",
     "extract-data": "node scripts/extract-data.mjs"
   },
   "dependencies": {
