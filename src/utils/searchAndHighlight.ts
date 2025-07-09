@@ -1,19 +1,31 @@
-function escapeRegex(term) {
+import { Article } from "@/types/article";
+
+export interface SearchOptions {
+  caseSensitive: boolean;
+}
+
+function escapeRegex(term: string): string {
   return term.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&");
 }
 
-function highlightText(text, regex) {
+function highlightText(text: string, regex: RegExp): string {
   return text.replace(regex, (match) => `<mark>${match}</mark>`);
 }
 
-function searchAndHighlight(articles, term, caseSensitive) {
+export function searchAndHighlight(
+  articles: Article[],
+  term: string,
+  options: SearchOptions
+): Article[] {
   if (!term) return [];
 
-  const flags = caseSensitive ? "g" : "gi";
-  const regex = new RegExp(escapeRegex(term), flags);
+  const safeTerm = escapeRegex(term);
+  const flags = options.caseSensitive ? "g" : "gi";
+  const regex = new RegExp(safeTerm, flags);
 
-  return articles.reduce((acc, article) => {
+  return articles.reduce<Article[]>((acc, article) => {
     let matchFound = false;
+
     let title = article.title;
     let content = article.content;
 
@@ -22,7 +34,7 @@ function searchAndHighlight(articles, term, caseSensitive) {
       matchFound = true;
     }
 
-    regex.lastIndex = 0;
+    regex.lastIndex = 0; // reset pour éviter bugs avec flag `g`
 
     if (regex.test(content)) {
       content = highlightText(content, regex);
@@ -42,9 +54,3 @@ function searchAndHighlight(articles, term, caseSensitive) {
     return acc;
   }, []);
 }
-
-self.onmessage = function (e) {
-  const { articles, searchTerm, caseSensitive } = e.data;
-  const result = searchAndHighlight(articles, searchTerm, caseSensitive);
-  postMessage(result);
-};
