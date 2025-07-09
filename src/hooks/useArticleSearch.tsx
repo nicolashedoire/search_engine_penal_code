@@ -15,6 +15,8 @@ const useArticleSearch = (
   const [isSearching, setIsSearching] = useState(false);
 
   useEffect(() => {
+    let currentWorker: Worker | undefined;
+  
     fetch("/searchWorker.js")
       .then((response) => {
         if (!response.ok) {
@@ -24,20 +26,23 @@ const useArticleSearch = (
       })
       .then((blob) => {
         const newWorker = new Worker(URL.createObjectURL(blob));
+        currentWorker = newWorker; // ✅ Stocker dans la variable locale
+        
         newWorker.onmessage = (e) => {
           const articlesMarked = e.data;
           dispatch({ type: "SET_SEARCH_RESULTS", payload: articlesMarked });
           setIsSearching(false);
         };
-
+  
         newWorker.onerror = (error) => {
           console.error("Erreur dans le Worker: ", error.message);
           setIsSearching(false);
         };
-
+  
         setWorker(newWorker);
       });
-    return () => worker?.terminate();
+      
+    return () => currentWorker?.terminate(); // ✅ Utiliser la variable locale
   }, []);
 
   const getHighlightedArticles = useCallback(() => {
