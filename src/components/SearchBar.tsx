@@ -1,9 +1,11 @@
-import React, { useState, useCallback, useRef } from "react";
+import React, { useState, useCallback, useRef, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Search, X } from "lucide-react";
 
 interface SearchBarProps {
   onSearch: (query: string) => void;
+  onFocusChange?: (focused: boolean) => void;
+  searchTerm?: string;
   placeholder?: string;
   className?: string;
 }
@@ -23,12 +25,19 @@ const debounce = <T extends any[]>(
 
 export default function SearchBar({ 
   onSearch, 
+  onFocusChange,
+  searchTerm = "",
   placeholder = "Recherchez des articles de loi par mot clé",
   className = ""
 }: SearchBarProps) {
-  const [inputValue, setInputValue] = useState("");
+  const [inputValue, setInputValue] = useState(searchTerm);
   const [isFocused, setIsFocused] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  // Synchroniser l'état interne avec le searchTerm externe
+  useEffect(() => {
+    setInputValue(searchTerm);
+  }, [searchTerm]);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const debouncedSearch = useCallback(
@@ -40,6 +49,16 @@ export default function SearchBar({
     const value = e.target.value;
     setInputValue(value);
     debouncedSearch(value);
+  };
+
+  const handleFocus = () => {
+    setIsFocused(true);
+    onFocusChange?.(true);
+  };
+
+  const handleBlur = () => {
+    setIsFocused(false);
+    onFocusChange?.(false);
   };
 
   const handleClear = () => {
@@ -78,8 +97,8 @@ export default function SearchBar({
           value={inputValue}
           onChange={handleInputChange}
           onKeyDown={handleKeyDown}
-          onFocus={() => setIsFocused(true)}
-          onBlur={() => setIsFocused(false)}
+          onFocus={handleFocus}
+          onBlur={handleBlur}
           placeholder={placeholder}
           className="
             flex-1 border-0 bg-transparent px-0 py-3
