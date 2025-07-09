@@ -50,9 +50,9 @@ self.onmessage = function (e) {
   };
 
   const createSearchRegex = (searchTerm, caseSensitive) => {
-    const safeSearchTerm = searchTerm.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&");
-    const flags = caseSensitive ? "g" : "gi";
-    return new RegExp(safeSearchTerm, flags);
+    const safe = searchTerm.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&");
+    const flags = caseSensitive ? "" : "i";    // ← plus de "g"
+    return new RegExp(safe, flags);
   };
 
   const regex = createSearchRegex(searchTerm, caseSensitive);

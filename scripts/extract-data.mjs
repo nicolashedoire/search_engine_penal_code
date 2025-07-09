@@ -19,9 +19,9 @@ const fetchWithTimeout = async (resource, options) => {
 const csvWriter = createCsvWriter({
   path: "scripts/articles.csv",
   header: [
-    { id: "title", title: "TITLE" },
-    { id: "url", title: "URL" },
-    { id: "content", title: "CONTENT" },
+    { id: "title", title: "title" },
+    { id: "url", title: "url" },
+    { id: "content", title: "content" },
   ],
 });
 

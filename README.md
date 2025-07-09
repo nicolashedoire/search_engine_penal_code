@@ -1,36 +1,170 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-## Getting Started
+---
 
-First, run the development server:
+### 1. Prérequis
+
+* Node.js (v18+)
+* npm (v9+), Yarn ou pnpm
+* Docker & Docker Compose
+* Accès au dépôt Git (clone si besoin)
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# Si tu n'as pas encore le code :
+git clone <URL_DU_REPO>
+cd <NOM_DU_PROJET>
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 2. Variables d'environnement
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+1. Copie le modèle :
 
-## Learn More
+   ```bash
+   cp .env.example .env.local
+   ```
+2. Dans `.env.local`, vérifie ou ajuste :
 
-To learn more about Next.js, take a look at the following resources:
+   ```dotenv
+   DATABASE_URL="mongodb://mongo:27017/engine_data"
+   NEXT_PUBLIC_API_URL=http://localhost:3000/api
+   ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+### 3. Installation des dépendances
 
-## Deploy on Vercel
+* Hors Docker (rapide pour installer localement) :
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+  ```bash
+  npm install
+  # ou yarn, pnpm install
+  ```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+* Avec Docker (dans le conteneur builder) :
+
+  ```bash
+  npm run dc:up    # monte app + mongo
+  ```
+
+---
+
+### 4. Base de données & Prisma
+
+1. Génère le client Prisma :
+
+   ```bash
+   npm run prisma:gen
+   ```
+2. Applique le schéma :
+
+   ```bash
+   npm run prisma:push
+   ```
+3. (Optionnel) Lance Studio :
+
+   ```bash
+   npm run prisma:studio
+   # ouvre http://localhost:5555
+   ```
+
+---
+
+### 5. Import / Seed des données
+
+* **Import CSV** :
+
+  ```bash
+  npm run db:import
+  ```
+* **Seed via script** : (si tu as `scripts/seed-from-csv.mjs`)
+
+  ```bash
+  npm run seed-csv
+  ```
+
+Après import, vérifie avec Mongo CLI ou Studio.
+
+---
+
+### 6. Développement local
+
+* **Mode dev (local)** :
+
+  ```bash
+  npm run dev
+  # si port 3000 occupé, passe en 3001 automatiquement
+  ```
+
+  Le code source (`app/` ou `pages/`) est surveillé, hot-reload actif.
+
+* **Mode dev (Docker)** : si tu veux que le conteneur gère tout :
+
+  ```bash
+  npm run dc:dev
+  # utilise le service Docker dédié "dev"
+  ```
+
+Visiter **[http://localhost:3000](http://localhost:3000)** (ou 3001) dans ton navigateur.
+
+---
+
+### 7. Build et production
+
+1. Construis le projet :
+
+   ```bash
+   npm run build
+   ```
+2. Démarre en mode prod (Docker ou local) :
+
+   ```bash
+   npm start
+   ```
+
+---
+
+### 8. Tests & Lint
+
+* **Tests unitaires** : `npm test`
+* **Lint** : `npm run lint`
+* **Prettier** : `npm run prettier`
+
+---
+
+### 9. Commandes utiles résumé
+
+| Alias                   | Description                                 |
+| ----------------------- | ------------------------------------------- |
+| `npm run dc:up`         | Build & lance Docker Compose (prod & mongo) |
+| `npm run dc:down`       | Arrête tout                                 |
+| `npm run dc:dev`        | Lance le mode dev dans Docker               |
+| `npm run dev`           | Mode dev local                              |
+| `npm run build`         | Build prod                                  |
+| `npm start`             | Lancer l'app en prod                        |
+| `npm run prisma:gen`    | Génère Prisma client                        |
+| `npm run prisma:push`   | Push du schéma Prisma                       |
+| `npm run prisma:studio` | Ouvre Prisma Studio                         |
+| `npm run db:import`     | Import CSV vers Mongo                       |
+| `npm test`              | Lance les tests Jest                        |
+| `npm run lint`          | Vérifie la qualité du code ESLint           |
+| `npm run prettier`      | Formate le code                             |
+
+---
+
+### 10. Structure du projet
+
+```
+mon-projet-nextjs/
+├─ app/ or pages/      # Tes routes et composants Next.js
+├─ public/             # Fichiers statiques
+├─ prisma/             # schema.prisma, migrations
+├─ scripts/            # import, export, seed
+├─ Dockerfile
+├─ docker-compose.yml
+├─ .env.local
+├─ package.json        # scripts & dépendances
+└─ README.md           # Ce fichier
+```
+
+---

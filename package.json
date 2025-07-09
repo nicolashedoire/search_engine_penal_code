@@ -13,7 +13,14 @@
     "test": "jest",
     "test-clear-cache": "jest --clearCache",
     "insert-data-in-db": "node scripts/insert-data-in-db.mjs",
-    "extract-data": "node scripts/extract-data.mjs"
+    "extract-data": "node scripts/extract-data.mjs",
+    "dc:up": "docker-compose up --build -d",
+    "dc:down": "docker-compose down",
+    "dc:dev": "docker-compose exec app npm run dev",
+    "prisma:gen": "docker-compose exec app npx prisma generate",
+    "prisma:push": "docker-compose exec app npx prisma db push",
+    "db:import": "docker-compose exec mongo mongoimport --db engine_data --collection Article --type csv --headerline --file /scripts/articles.csv",
+    "prisma:studio": "docker-compose exec app npx prisma studio --hostname 0.0.0.0 --port 5555"
   },
   "dependencies": {
     "@prisma/client": "^5.5.2",

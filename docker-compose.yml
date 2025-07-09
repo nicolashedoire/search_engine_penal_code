@@ -1,0 +1,28 @@
+services:
+  mongo:
+    image: mongo:6
+    container_name: mongo_local
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+      - ./scripts:/scripts   
+
+  app:
+    build: .
+    container_name: next_app
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+      - "5555:5555" 
+    env_file:
+      - .env
+    environment:
+      # surcharge si besoin
+      DATABASE_URL: ${DATABASE_URL}
+    depends_on:
+      - mongo
+
+volumes:
+  mongo_data:
